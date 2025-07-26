@@ -10,7 +10,6 @@ const LogInPage = () => {
   let [emailerr, setEmailerr] = useState("");
   let [passworderr, setPassworderr] = useState("");
   let [passwordShow, setpasswordShow] = useState(false);
-  let [loader, setLoader] = useState(false);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -102,14 +101,7 @@ const LogInPage = () => {
             >
               Sign up
             </button>
-            <DNA
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="dna-loading"
-              wrapperStyle={{}}
-              wrapperClass="dna-wrapper"
-            />
+
             <div className="w-[230px] mx-auto mt-[35px]">
               <p className="">
                 Don’t have an account ?

@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { IoEye } from "react-icons/io5";
 import { IoIosEyeOff } from "react-icons/io";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { DNA } from "react-loader-spinner";
 
 const SignUpPage = () => {
+  const auth = getAuth();
+  const navigate = useNavigate();
   let [email, setEmail] = useState("");
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
@@ -11,6 +15,7 @@ const SignUpPage = () => {
   let [nameerr, setNameerr] = useState("");
   let [passworderr, setPassworderr] = useState("");
   let [passwordShow, setpasswordShow] = useState(false);
+  let [loader, setLoader] = useState(false);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -34,6 +39,29 @@ const SignUpPage = () => {
     }
     if (!password) {
       setPassworderr("Password is requires");
+    }
+    if (name && email && password) {
+      setLoader(true);
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          setTimeout(() => {
+            setLoader(false);
+            // Signed up
+            navigate("/");
+            const user = userCredential.user;
+            console.log(user);
+            // ...
+          }, 3000);
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            setLoader(false);
+            console.log(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+          }, 3000);
+        });
     }
   };
   return (
@@ -76,7 +104,7 @@ const SignUpPage = () => {
               <p className=" text-red-500 text-xl font-normal">{nameerr}</p>
             )}
           </div>
-          <div className="w-[369px] h-[80px] relative mt-[47px] mb-[51px]  relative">
+          <div className="w-[369px] h-[80px] mt-[47px] mb-[51px]  relative">
             <label className="text-[13.76px] font-semibold text-[#11175D]/50 absolute top-[-20px] left-[20px] p-3 bg-white  ">
               Password
             </label>
@@ -103,12 +131,26 @@ const SignUpPage = () => {
             )}
           </div>
           <div className="w-[368px] h-[67px]">
-            <button
-              onClick={handleSubmit}
-              className="text-[20px] font-semibold text-white w-full h-full bg-one rounded-[68px] cursor-pointer "
-            >
-              Sign up
-            </button>
+            {loader ? (
+              <div>
+                <DNA
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper mx-auto"
+                />
+              </div>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                className="text-[20px] font-semibold text-white w-full h-full bg-one rounded-[68px] cursor-pointer "
+              >
+                Sign up
+              </button>
+            )}
+
             <div className="w-[230px] mx-auto mt-[35px]">
               <p className="">
                 Already have an account ?{" "}
