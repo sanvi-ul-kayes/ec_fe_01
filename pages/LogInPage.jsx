@@ -2,35 +2,32 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { IoEye } from "react-icons/io5";
 import { IoIosEyeOff } from "react-icons/io";
+import { DNA } from "react-loader-spinner";
 
-const SignUpPage = () => {
+const LogInPage = () => {
   let [email, setEmail] = useState("");
-  let [name, setName] = useState("");
   let [password, setPassword] = useState("");
   let [emailerr, setEmailerr] = useState("");
-  let [nameerr, setNameerr] = useState("");
   let [passworderr, setPassworderr] = useState("");
   let [passwordShow, setpasswordShow] = useState(false);
+  let [loader, setLoader] = useState(false);
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
     setEmailerr("");
   };
-  const handleName = (e) => {
-    setName(e.target.value);
-    setNameerr("");
-  };
   const handlePassword = (e) => {
     setPassword(e.target.value);
     setPassworderr("");
   };
-
+  ///^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value)
   const handleSubmit = () => {
-    if (!name) {
-      setNameerr("Name is requires");
-    }
     if (!email) {
       setEmailerr("Email is requires");
+    } else if (
+      !/^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim.test(email)
+    ) {
+      setEmailerr("Invalid Email");
     }
     if (!password) {
       setPassworderr("Password is requires");
@@ -41,18 +38,22 @@ const SignUpPage = () => {
       <div className="w-1/2 flex justify-end items-center mr-[69px]">
         <div>
           <h1 className=" text-[34.4px] font-bold text-two">
-            Get started with easily register
+            Login to your account!
           </h1>
-          <p className="text-[20.67px] font-normal text-[#000000] opacity-50 mt-[13px] mb-[40px]">
-            Free register and you can enjoy it
-          </p>
+
           <div className="w-[369px] h-[80px] relative mt-[47px]">
-            <label className="text-[13.76px] font-semibold text-[#11175D]/50 absolute top-[-20px] left-[20px] p-3 bg-white  ">
+            <label
+              className={`text-[13.76px] font-semibold ${
+                emailerr ? "text-red-400" : "text-[#11175D]/50"
+              }  absolute top-[-20px] left-[20px] p-3 bg-white`}
+            >
               Email Address
             </label>
             <input
               onChange={handleEmail}
-              className="w-full h-full border-1 border-two/50 p-10 rounded-lg"
+              className={`w-full h-full border-b-1 ${
+                emailerr ? "border-red-400" : "border-two/50"
+              }  p-10`}
               type="text"
               placeholder="Enter your Email"
               value={email}
@@ -61,28 +62,20 @@ const SignUpPage = () => {
               <p className=" text-red-500 text-xl font-normal">{emailerr}</p>
             )}
           </div>
-          <div className="w-[369px] h-[80px] relative mt-[47px]">
-            <label className="text-[13.76px] font-semibold text-[#11175D]/50 absolute top-[-20px] left-[20px] p-3 bg-white  ">
-              Full name
-            </label>
-            <input
-              onChange={handleName}
-              className="w-full h-full border-1 border-two/50 p-10 rounded-lg"
-              type="text"
-              placeholder="Enter your Full name"
-              value={name}
-            />
-            {nameerr && (
-              <p className=" text-red-500 text-xl font-normal">{nameerr}</p>
-            )}
-          </div>
-          <div className="w-[369px] h-[80px] relative mt-[47px] mb-[51px]  relative">
-            <label className="text-[13.76px] font-semibold text-[#11175D]/50 absolute top-[-20px] left-[20px] p-3 bg-white  ">
+
+          <div className="w-[369px] h-[80px]  mt-[47px] mb-[51px]  relative">
+            <label
+              className={`text-[13.76px] font-semibold ${
+                passworderr ? "text-red-500" : "text-[#11175D]/50"
+              }  absolute top-[-20px] left-[20px] p-3 bg-white`}
+            >
               Password
             </label>
             <input
               onChange={handlePassword}
-              className="w-full h-full border-1 border-two/50 p-10 rounded-lg"
+              className={`w-full h-full border-b-1 ${
+                passworderr ? "border-red-500" : " border-two/50"
+              } p-10`}
               type={passwordShow ? "text" : "password"}
               placeholder="......."
               value={password}
@@ -105,15 +98,23 @@ const SignUpPage = () => {
           <div className="w-[368px] h-[67px]">
             <button
               onClick={handleSubmit}
-              className="text-[20px] font-semibold text-white w-full h-full bg-one rounded-[68px] cursor-pointer "
+              className="text-[20px] font-semibold text-white w-full h-full bg-one rounded-[9px] cursor-pointer "
             >
               Sign up
             </button>
+            <DNA
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
             <div className="w-[230px] mx-auto mt-[35px]">
               <p className="">
-                Already have an account ?{" "}
-                <Link to={"/"} className="text-[#EA6C00]">
-                  Sign In
+                Don’t have an account ?
+                <Link to={"/SignUpPage"} className="text-[#EA6C00]">
+                  Sign Up
                 </Link>{" "}
               </p>
             </div>
@@ -123,12 +124,12 @@ const SignUpPage = () => {
       <div className="w-1/2">
         <img
           className=" ml-auto h-full w-full object-cover"
-          src="signUp.jpg.png"
-          alt="signUp.jpg.png"
+          src="Login.png"
+          alt="Login.png"
         />
       </div>
     </div>
   );
 };
 
-export default SignUpPage;
+export default LogInPage;
